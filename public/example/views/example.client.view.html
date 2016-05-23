@@ -1,0 +1,19 @@
+<section ng-controller="ExampleController">
+
+    <div ng-show="!authentication.user">
+        <a href="/signup">Sign up</a>
+        <a href="/signin">Sign in</a>
+    </div>
+
+    <div ng-show="authentication.user">
+        <h1>Hellow <span>{{authentication.user.fullName}}</span></h1>
+        <a href="/signout">Sign out</a>
+        <ul>
+            <li><a href="/#!/articles">List Articles</a></li>
+            <li><a href="/#!/articles/create">Create Articles</a></li>
+        </ul>
+    </div>
+
+    <!--<input type="text" id="text1" ng-model="name" />
+    <input type="text" id="text2" ng-model="name" />-->
+</section>

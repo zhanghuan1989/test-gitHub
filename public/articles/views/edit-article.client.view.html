@@ -1,0 +1,28 @@
+<section ng-controller="ArticlesController">
+    <h1>Edit Article</h1>
+
+    <form ng-submit="create()" novalidate>
+        <div>
+            <lable for="title">Title</lable>
+            <div>
+                <input type="text" ng-model="title" id="title" name="title" placeholder="title"  required/>
+            </div>
+        </div>
+
+        <div>
+            <lable for="content">Title</lable>
+            <div>
+                <input type="text" ng-model="content" id="content" name="content" placeholder="content" cols="30" rows="10" />
+            </div>
+        </div>
+
+        <div>
+            <input type="submit" value="Ìá½»"/>
+        </div>
+
+        <div ng-show="error">
+            <strong>{{error}}</strong>
+        </div>
+
+    </form>
+</section>

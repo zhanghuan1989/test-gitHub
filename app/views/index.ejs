@@ -1,0 +1,203 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<title>MONGODB</title>
+<script src="lib/zepto/zepto.js"></script>
+<style>
+	.img{width:1050px;height:40px;margin:0 auto;padding-bottom: 20px;}
+	.img img{width: 100%;}
+	h1{width: 1050px;margin: 20px auto;text-align: center}
+	.content{width: 1050px;margin: 0 auto;}
+	td{width: 50px;}
+	a:visited{color: #0DAEAD}
+	a{color: #0DAEAD;font:16px/17px miscorft Yahei}
+	.yuser{width: 1050px;margin: 0 auto;}
+</style>
+</head>
+<body>
+    <p class="img"><img src="img/page-banner.jpg"></p>
+	<h1><%= title %>
+		<span style="text-align: right;float: right">
+			<a href="/signout" class="link">注销</a> &nbsp;
+			<a href="/signup" class="link">注册</a>
+		</span>
+	</h1>
+	<h1 class="yuser">
+		<% if(userFullName){%>
+			<p>Hello <%=userFullName %></p>
+		<% }else{ %>
+
+		<% } %>
+	</h1>
+	<div class="content">
+		<!--<input type="button" onclick="sub()" value="提交"/>-->
+		<input type="button" onclick="find()" value="查找"/><br/>
+		<p>&nbsp;&nbsp;</p>
+		<!--<input type="button" onclick="ajaxTest()" value="接口测试"/>-->
+		<form id="form"></form>
+			<p>
+				
+			FirstName:<input type="text" name="firstName" id="firstName"/><br/>
+			LastName:<input type="text" name="lastName" id="lastName"/><br/>
+			Email:<input type="text" name="email" id="email"/><br/>
+			UserName:<input type="text" name="userName" id="userName"/><br/>
+			Password:<input type="text" name="password" id="password"/><br/>
+			</p>
+			<div>
+				<table border="1" id="data" width="500">
+					<tr>
+						<td>FirstName</td><td>LastName</td><td>Email</td><td>UserName</td><td>操作</td>
+					</tr>
+
+				</table>
+			</div>
+
+		<p>&nbsp;&nbsp;</p>
+		<p>&nbsp;&nbsp;</p>
+		<p>===================angular==============================</p>
+		<!--<section ng-include="'example/views/example.client.view.html'"></section>-->
+		<section ng-view></section>
+
+
+
+
+	</div>
+
+	<script>window.user = <%- user || null %> ;console.log(window.user);</script>
+	<script src="/lib/angular/angular.js"></script>
+	<script src="/lib/angular-route/angular-route.js"></script>
+	<script src="/lib/angular-resource/angular-resource.js"></script>
+
+	<script src="/articles/articles.client.module.js"></script>
+	<script src="/articles/controllers/articles.client.controller.js"></script>
+	<script src="/articles/services/articles.client.service.js"></script>
+	<script src="/articles/config/articles.client.routes.js"></script>
+
+	<script src="/example/example.client.module.js"></script>
+	<script src="/example/controller/example.client.controller.js"></script>
+	<script src="/example/config/example.client.routes.js"></script>
+	<script src="/users/users.client.module.js"></script>
+	<script src="/users/services/authentication.client.service.js"></script>
+
+	<script src="/application.js"></script>
+
+
+	<script>
+
+		function ajaxTest(){
+			$.ajax({
+				type:"post",
+				url:"/callInterface",
+				dataType:"json",
+				success: function (data) {
+					console.log(data);
+				},
+				error:function(){
+
+				}
+			});
+		}
+
+		function sub(){
+			var user = {
+				"firstName":$("#firstName").val(),
+				"lastName":$("#lastName").val(),
+				"email":$("#email").val(),
+				"userName":$("#userName").val(),
+				"password":$("#password").val()
+			};
+			$.ajax({
+				type:"post",
+				url:"/users",
+				data:user,
+				dataType:"json",
+				success: function (data) {
+					alert(data.message);
+					find();
+				},
+				error:function(){
+
+				}
+			});
+		}
+
+		function findOne(id){
+			$.ajax({
+				type:"post",
+				url:"/usersListOne/"+id+"",
+				dataType:"json",
+				success: function (data) {
+					$("#firstName").val(data.firstName);
+					$("#lastName").val(data.lastName);
+					$("#email").val(data.email);
+					$("#userName").val(data.userName);
+					$("#password").val(data.password);
+				},
+				error:function(){
+
+				}
+			});
+		}
+
+		function find(){
+			$.ajax({
+				type:"post",
+				url:"/usersList",
+				dataType:"json",
+				success: function (data) {
+					if(!data){alert('暂无数据');return;}
+					$(".user").remove();
+					$.each(data,function(index,elt){
+						var html = '<tr class="user" id='+elt._id+'><td>'+elt.firstName+'</td><td>'+elt.lastName+'</td><td>'+elt.email+'</td><td>'+elt.userName+'</td><td><a href="javascript:findOne(\''+elt._id+'\');">查看</a><br/><a href="javascript:upda(\''+elt._id+'\');">更新</a><br/><a href="javascript:del(\''+elt._id+'\');">删除</a></td></tr>';
+						$("#data").append(html);
+					});
+				},
+				error:function(){
+
+				}
+			})
+		}
+
+		function upda(id){
+			var user = {
+				"firstName":$("#firstName").val(),
+				"lastName":$("#lastName").val(),
+				"email":$("#email").val(),
+				"userName":$("#userName").val(),
+				"password":$("#password").val()
+			};
+			$.ajax({
+				type:"post",
+				url:"/update/"+id,
+				data:user,
+				dataType:"json",
+				success: function (data) {
+					alert(data.message);
+					find();
+				},
+				error:function(){
+
+				}
+			});
+		}
+		function del(id){
+			$.ajax({
+				type:"post",
+				url:"/del/"+id,
+				dataType:"json",
+				success: function (data) {
+					alert(data.message);
+					find();
+				},
+				error:function(){
+
+				}
+			});
+		}
+	</script>
+</body>
+</html>

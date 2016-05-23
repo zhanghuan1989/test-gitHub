@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../node_modules/zepto/zepto.min.js"></script>
+</head>
+<body>
+<input type="button" onclick="sub()" value="提交"/>
+
+<script>
+    function sub(){
+        var user = {
+            "firstName":"BWP",
+            "lastName":"YSC",
+            "email":"100220@qq.com",
+            "userName":"bwp",
+            "password":"123456"
+        };
+
+        $.ajax({
+            type:"post",
+            url:"http://localhost:2300/users",
+            data:user,
+            dataType:"json",
+            success: function (data) {
+                alert(222);
+            },
+            error:function(){
+
+            }
+        })
+    }
+</script>
+</body>
+</html>
